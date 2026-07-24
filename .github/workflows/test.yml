@@ -1,0 +1,35 @@
+name: Test Watch Fox
+
+# When should this workflow run?
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    # The type of virtual machine GitHub spins up to run our steps
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Copy our repo's code onto the runner
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Node.js on the runner
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Step 3: Install our app's dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: A basic smoke test - start the app and confirm it responds
+      - name: Smoke test - app starts and responds
+        run: |
+          node app.js &
+          sleep 3
+          curl --fail http://localhost:8080/health

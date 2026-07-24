@@ -1,0 +1,12 @@
+{
+  "name": "watch-fox",
+  "version": "1.0.0",
+  "description": "Watch Fox - portfolio project demonstrating AWS architecture and DevOps skills",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
