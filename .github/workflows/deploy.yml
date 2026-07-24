@@ -1,0 +1,63 @@
+name: Test and Deploy Watch Fox
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Smoke test - app starts and responds
+        run: |
+          node app.js &
+          sleep 3
+          curl --fail http://localhost:8080/health
+
+  build-and-push:
+    # Only build/push after tests pass, and only on pushes to main
+    # (not on pull requests - we don't want to push images for unmerged code)
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # Sets up credentials so later steps can talk to AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Logs Docker in to ECR so we're allowed to push images there
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Build the image (using our Dockerfile) and push it to ECR,
+      # tagging it both with a unique commit SHA and "latest"
+      - name: Build, tag, and push image to ECR
+        env:
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REPOSITORY:latest .
+          docker push $ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REPOSITORY:latest
