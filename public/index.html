@@ -5,19 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Watch Fox — Status</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #F6EEDF;
-    --card: #FDF9F0;
-    --bark: #4A3324;
-    --bark-soft: #7A6046;
-    --ember: #E0722F;
-    --ember-dark: #B8551E;
-    --fern: #5F7A46;
-    --fern-dark: #3F5630;
-    --acorn: #B9824C;
-    --line: #E6D9C2;
+    --bg: #FFFFFF;
+    --panel: #FAFAFA;
+    --border: #E4E4E7;
+    --text: #18181B;
+    --text-muted: #71717A;
+    --text-faint: #A1A1AA;
+    --ember: #E0611E;
+    --ember-bg: #FDEEE4;
+    --green: #16A34A;
+    --green-bg: #EFFAF2;
+    --red: #DC2626;
+    --red-bg: #FDECEC;
   }
 
   * { box-sizing: border-box; }
@@ -25,199 +27,201 @@
   body {
     margin: 0;
     min-height: 100vh;
-    background: var(--cream);
-    background-image:
-      radial-gradient(circle at 15% 20%, rgba(95,122,70,0.08) 0, transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(224,114,47,0.08) 0, transparent 40%);
+    background: var(--bg);
     font-family: 'Inter', sans-serif;
-    color: var(--bark);
+    color: var(--text);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px 16px;
+    padding: 40px 16px;
   }
 
   .card {
-    position: relative;
     width: 100%;
-    max-width: 480px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 40px 32px 32px;
-    box-shadow: 0 1px 3px rgba(74,51,36,0.06), 0 12px 32px rgba(74,51,36,0.08);
+    max-width: 440px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
   }
 
-  .logo-wrap {
-    position: absolute;
-    top: -54px;
-    right: 18px;
-    width: 96px;
-    height: 96px;
-    filter: drop-shadow(0 6px 10px rgba(74,51,36,0.18));
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
   }
-  .logo-wrap img {
-    width: 100%;
-    height: 100%;
+
+  .header img {
+    width: 32px;
+    height: 32px;
     object-fit: contain;
+    border-radius: 6px;
   }
 
-  .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--fern-dark);
-    margin: 0 0 6px;
-  }
-
-  h1 {
-    font-family: 'Baloo 2', sans-serif;
-    font-weight: 700;
-    font-size: 30px;
-    margin: 0 0 4px;
-    color: var(--bark);
-    max-width: 75%;
-  }
-
-  .sub {
-    font-size: 14px;
-    color: var(--bark-soft);
-    margin: 0 0 28px;
-  }
-
-  .status-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 16px;
-    background: var(--cream);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
-
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--bark-soft);
-    flex-shrink: 0;
-    transition: background 0.3s ease;
-  }
-  .dot.up { background: var(--fern); box-shadow: 0 0 0 4px rgba(95,122,70,0.18); }
-  .dot.down { background: var(--ember-dark); box-shadow: 0 0 0 4px rgba(184,85,30,0.18); }
-
-  .status-text {
-    font-family: 'Baloo 2', sans-serif;
-    font-weight: 500;
+  .header-text h1 {
     font-size: 15px;
-    flex-grow: 1;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text);
   }
 
-  .status-time {
+  .header-text p {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--bark-soft);
+    color: var(--text-faint);
+    margin: 2px 0 0;
   }
 
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 24px 0 16px;
+  .section {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
   }
-  .divider .line { flex-grow: 1; height: 1px; background: var(--line); }
-  .divider span {
+  .section:last-child { border-bottom: none; }
+
+  .label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--bark-soft);
+    color: var(--text-faint);
+    margin: 0 0 12px;
+  }
+
+  .status-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .status-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-faint);
+    flex-shrink: 0;
+  }
+  .dot.up { background: var(--green); }
+  .dot.down { background: var(--red); }
+
+  .status-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: var(--panel);
+    color: var(--text-muted);
+  }
+  .badge.up { background: var(--green-bg); color: var(--green); }
+  .badge.down { background: var(--red-bg); color: var(--red); }
+
+  .status-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-top: 10px;
   }
 
   button.simulate {
     width: 100%;
-    font-family: 'Baloo 2', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    font-size: 15px;
-    color: #FFF6EA;
+    font-size: 13px;
+    color: #FFFFFF;
     background: var(--ember);
     border: none;
-    border-radius: 12px;
-    padding: 13px 20px;
+    border-radius: 7px;
+    padding: 11px 16px;
     cursor: pointer;
-    transition: background 0.15s ease, transform 0.1s ease;
+    transition: background 0.15s ease;
   }
-  button.simulate:hover { background: var(--ember-dark); }
-  button.simulate:active { transform: scale(0.98); }
+  button.simulate:hover { background: #C6520F; }
   button.simulate:disabled { opacity: 0.6; cursor: default; }
 
   .hint {
     font-size: 12px;
-    color: var(--bark-soft);
-    margin: 8px 0 0;
-    line-height: 1.5;
+    color: var(--text-muted);
+    margin: 10px 0 0;
+    line-height: 1.55;
   }
 
   .result {
-    margin-top: 16px;
-    padding: 14px 16px;
-    background: var(--cream);
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--ember);
-    border-radius: 8px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 7px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-size: 11.5px;
     line-height: 1.6;
-    color: var(--bark);
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
     display: none;
   }
   .result.show { display: block; }
 
   .footer {
-    margin-top: 24px;
-    font-size: 12px;
-    color: var(--bark-soft);
+    padding: 14px 24px;
+    background: var(--panel);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-faint);
     text-align: center;
-  }
-
-  @media (max-width: 400px) {
-    .logo-wrap { width: 76px; height: 76px; top: -42px; right: 12px; }
-    h1 { font-size: 25px; }
   }
 </style>
 </head>
 <body>
 
   <div class="card">
-    <div class="logo-wrap">
+    <div class="header">
       <img src="/watch-fox-logo.png" alt="Watch Fox logo" />
+      <div class="header-text">
+        <h1>Watch Fox</h1>
+        <p>service status</p>
+      </div>
     </div>
 
-    <p class="eyebrow">Watch Fox</p>
-    <h1>Den status</h1>
-    <p class="sub">Live health of the Watch Fox service.</p>
-
-    <div class="status-row">
-      <div class="dot" id="statusDot"></div>
-      <div class="status-text" id="statusText">Checking…</div>
-      <div class="status-time" id="statusTime"></div>
+    <div class="section">
+      <p class="label">Health</p>
+      <div class="status-line">
+        <div class="status-left">
+          <div class="dot" id="statusDot"></div>
+          <span class="status-text" id="statusText">checking...</span>
+        </div>
+        <span class="badge" id="statusBadge">—</span>
+      </div>
+      <p class="status-time">last checked <span id="statusTime">—</span></p>
     </div>
 
-    <div class="divider"><div class="line"></div><span>Alert pipeline</span><div class="line"></div></div>
+    <div class="section">
+      <p class="label">Alert pipeline</p>
+      <button class="simulate" id="simulateBtn">simulate error</button>
+      <p class="hint">Logs a simulated database error to test the CloudWatch → Lambda → email alert path.</p>
+      <div class="result" id="result"></div>
+    </div>
 
-    <button class="simulate" id="simulateBtn">Simulate an error</button>
-    <p class="hint">Logs a fake database error. Flows through CloudWatch → Lambda → email if the pipeline is wired up.</p>
-
-    <div class="result" id="result"></div>
-
-    <p class="footer">Fetches /health and /simulate-error from this app.</p>
+    <div class="footer">GET /health · GET /simulate-error</div>
   </div>
 
 <script>
   const dot = document.getElementById('statusDot');
   const statusText = document.getElementById('statusText');
+  const statusBadge = document.getElementById('statusBadge');
   const statusTime = document.getElementById('statusTime');
   const btn = document.getElementById('simulateBtn');
   const result = document.getElementById('result');
@@ -228,32 +232,38 @@
       const data = await res.json();
       if (res.ok && data.status === 'healthy') {
         dot.className = 'dot up';
-        statusText.textContent = 'Watch Fox is awake';
+        statusText.textContent = 'operational';
+        statusBadge.className = 'badge up';
+        statusBadge.textContent = '200 OK';
       } else {
         dot.className = 'dot down';
-        statusText.textContent = 'Unexpected response';
+        statusText.textContent = 'unexpected response';
+        statusBadge.className = 'badge down';
+        statusBadge.textContent = res.status;
       }
     } catch (err) {
       dot.className = 'dot down';
-      statusText.textContent = 'Watch Fox is unreachable';
+      statusText.textContent = 'unreachable';
+      statusBadge.className = 'badge down';
+      statusBadge.textContent = 'ERR';
     }
     statusTime.textContent = new Date().toLocaleTimeString();
   }
 
   btn.addEventListener('click', async () => {
     btn.disabled = true;
-    btn.textContent = 'Simulating…';
+    btn.textContent = 'simulating...';
     try {
       const res = await fetch('/simulate-error');
       const data = await res.json();
-      result.textContent = 'Response ' + res.status + ': ' + JSON.stringify(data);
+      result.textContent = res.status + ' ' + JSON.stringify(data);
       result.classList.add('show');
     } catch (err) {
-      result.textContent = 'Request failed: ' + err.message;
+      result.textContent = 'request failed: ' + err.message;
       result.classList.add('show');
     }
     btn.disabled = false;
-    btn.textContent = 'Simulate an error';
+    btn.textContent = 'simulate error';
     checkHealth();
   });
 
