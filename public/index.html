@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch Fox — Status</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F6EEDF;
+    --card: #FDF9F0;
+    --bark: #4A3324;
+    --bark-soft: #7A6046;
+    --ember: #E0722F;
+    --ember-dark: #B8551E;
+    --fern: #5F7A46;
+    --fern-dark: #3F5630;
+    --acorn: #B9824C;
+    --line: #E6D9C2;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--cream);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(95,122,70,0.08) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(224,114,47,0.08) 0, transparent 40%);
+    font-family: 'Inter', sans-serif;
+    color: var(--bark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 40px 32px 32px;
+    box-shadow: 0 1px 3px rgba(74,51,36,0.06), 0 12px 32px rgba(74,51,36,0.08);
+  }
+
+  .logo-wrap {
+    position: absolute;
+    top: -54px;
+    right: 18px;
+    width: 96px;
+    height: 96px;
+    filter: drop-shadow(0 6px 10px rgba(74,51,36,0.18));
+  }
+  .logo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fern-dark);
+    margin: 0 0 6px;
+  }
+
+  h1 {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    margin: 0 0 4px;
+    color: var(--bark);
+    max-width: 75%;
+  }
+
+  .sub {
+    font-size: 14px;
+    color: var(--bark-soft);
+    margin: 0 0 28px;
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bark-soft);
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+  }
+  .dot.up { background: var(--fern); box-shadow: 0 0 0 4px rgba(95,122,70,0.18); }
+  .dot.down { background: var(--ember-dark); box-shadow: 0 0 0 4px rgba(184,85,30,0.18); }
+
+  .status-text {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    flex-grow: 1;
+  }
+
+  .status-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--bark-soft);
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 24px 0 16px;
+  }
+  .divider .line { flex-grow: 1; height: 1px; background: var(--line); }
+  .divider span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bark-soft);
+  }
+
+  button.simulate {
+    width: 100%;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: #FFF6EA;
+    background: var(--ember);
+    border: none;
+    border-radius: 12px;
+    padding: 13px 20px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  button.simulate:hover { background: var(--ember-dark); }
+  button.simulate:active { transform: scale(0.98); }
+  button.simulate:disabled { opacity: 0.6; cursor: default; }
+
+  .hint {
+    font-size: 12px;
+    color: var(--bark-soft);
+    margin: 8px 0 0;
+    line-height: 1.5;
+  }
+
+  .result {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ember);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--bark);
+    display: none;
+  }
+  .result.show { display: block; }
+
+  .footer {
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--bark-soft);
+    text-align: center;
+  }
+
+  @media (max-width: 400px) {
+    .logo-wrap { width: 76px; height: 76px; top: -42px; right: 12px; }
+    h1 { font-size: 25px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo-wrap">
+      <img src="/watch-fox-logo.png" alt="Watch Fox logo" />
+    </div>
+
+    <p class="eyebrow">Watch Fox</p>
+    <h1>Den status</h1>
+    <p class="sub">Live health of the Watch Fox service.</p>
+
+    <div class="status-row">
+      <div class="dot" id="statusDot"></div>
+      <div class="status-text" id="statusText">Checking…</div>
+      <div class="status-time" id="statusTime"></div>
+    </div>
+
+    <div class="divider"><div class="line"></div><span>Alert pipeline</span><div class="line"></div></div>
+
+    <button class="simulate" id="simulateBtn">Simulate an error</button>
+    <p class="hint">Logs a fake database error. Flows through CloudWatch → Lambda → email if the pipeline is wired up.</p>
+
+    <div class="result" id="result"></div>
+
+    <p class="footer">Fetches /health and /simulate-error from this app.</p>
+  </div>
+
+<script>
+  const dot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  const statusTime = document.getElementById('statusTime');
+  const btn = document.getElementById('simulateBtn');
+  const result = document.getElementById('result');
+
+  async function checkHealth() {
+    try {
+      const res = await fetch('/health');
+      const data = await res.json();
+      if (res.ok && data.status === 'healthy') {
+        dot.className = 'dot up';
+        statusText.textContent = 'Watch Fox is awake';
+      } else {
+        dot.className = 'dot down';
+        statusText.textContent = 'Unexpected response';
+      }
+    } catch (err) {
+      dot.className = 'dot down';
+      statusText.textContent = 'Watch Fox is unreachable';
+    }
+    statusTime.textContent = new Date().toLocaleTimeString();
+  }
+
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    btn.textContent = 'Simulating…';
+    try {
+      const res = await fetch('/simulate-error');
+      const data = await res.json();
+      result.textContent = 'Response ' + res.status + ': ' + JSON.stringify(data);
+      result.classList.add('show');
+    } catch (err) {
+      result.textContent = 'Request failed: ' + err.message;
+      result.classList.add('show');
+    }
+    btn.disabled = false;
+    btn.textContent = 'Simulate an error';
+    checkHealth();
+  });
+
+  checkHealth();
+  setInterval(checkHealth, 15000);
+</script>
+
+</body>
+</html>

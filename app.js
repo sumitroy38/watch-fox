@@ -1,9 +1,16 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-app.get("/", (req, res) => {
+// Serves the dashboard (index.html) and logo image from the public/ folder.
+// A request to "/" will automatically be served index.html.
+app.use(express.static(path.join(__dirname, "public")));
+
+// Keep a plain JSON root response too, reachable at /api so the dashboard
+// and the original JSON status check can both exist.
+app.get("/api", (req, res) => {
   res.json({
     message: "Watch Fox is running",
     time: new Date().toISOString()
